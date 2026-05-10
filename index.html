@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,6 @@
 <title>Traveloop – Personalized Travel Planning</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-/* ... (pazhaya CSS ellaame irukkum) ... */
 :root {
   --bg: #08080f; --surface: #10101e; --surface2: #18182e;
   --purple: #7c3aed; --purple-light: #a855f7; --purple-glow: rgba(124,58,237,0.35);
@@ -16,85 +16,98 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-/* PAGES - Important Fix */
+/* --- IMPORTANT FIX: PAGE VISIBILITY --- */
 .page { display: none; min-height: 100vh; position: relative; z-index: 1; }
 .page.active { display: block !important; }
+#page-login.active { display: flex !important; align-items: center; justify-content: center; }
 
-/* ... (Matha styling - original code-il irunthu) ... */
-#page-login{display:none; align-items:center; justify-content:center; min-height:100vh;}
-#page-login.active{display:flex !important;}
-
-/* Original CSS-ai apadiyae thodaraum... */
+/* NAV */
 nav{ display:none; align-items:center; justify-content:space-between; padding:18px 32px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; background:rgba(8,8,15,0.85); backdrop-filter:blur(16px); }
-.logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;cursor:pointer;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;letter-spacing:-0.5px;cursor:pointer;}
 .logo span{background:linear-gradient(135deg,var(--purple-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
-.btn{padding:12px 24px;border-radius:50px;font-weight:600;cursor:pointer;border:none;}
-.btn-primary{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;}
-.input-group{margin-bottom:18px; text-align:left;}
+
+/* CARDS & UI */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;width:100%;max-width:400px;box-shadow:0 0 40px var(--purple-glow);}
+.input-group{margin-bottom:18px; text-align: left;}
 .input-group label{display:block;margin-bottom:6px;font-size:0.85rem;color:var(--muted);}
-.input-group input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;color:#fff;}
+.input-group input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;color:#fff;outline:none;}
+.btn{padding:14px;border-radius:50px;font-weight:600;cursor:pointer;border:none;width:100%;background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--purple-light);border-radius:12px;padding:14px 20px;display:none;z-index:1000;}
 </style>
 </head>
 <body>
 
+<div class="toast" id="toast"></div>
+
 <nav id="main-nav">
   <div class="logo">Travel<span>oop</span></div>
+  <div style="color:var(--muted)">Menu items will appear here</div>
 </nav>
 
 <div class="page active" id="page-login">
-  <div style="width:100%; max-width:400px; text-align:center;">
-    <div class="logo" style="font-size:3rem; margin-bottom:20px;">Travel<span>oop</span></div>
+  <div style="text-align:center;">
+    <div class="logo" style="font-size:3.5rem; margin-bottom:30px;">Travel<span>oop</span></div>
     <div class="card">
-      <h2 style="margin-bottom:20px;">Welcome Back</h2>
+      <h2 style="margin-bottom:20px;">Welcome</h2>
       <div class="input-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="you@example.com">
+        <label>Email</label>
+        <input type="email" id="userEmail" placeholder="Anything works!">
       </div>
       <div class="input-group">
         <label>Password</label>
-        <input type="password" placeholder="••••••••">
+        <input type="password" placeholder="Any password!">
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Login to Traveloop</button>
+      <button class="btn" onclick="doLogin()">Login</button>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-dashboard">
-  <div style="padding:40px; text-align:center;">
-    <h1>Welcome to your Dashboard</h1>
-    <p style="color:var(--muted); margin-top:10px;">You are now logged in!</p>
+  <div style="padding:100px 20px; text-align:center;">
+    <h1 style="font-size:3rem;">Welcome to <span style="color:var(--purple-light)">Dashboard!</span></h1>
+    <p style="margin-top:20px; color:var(--muted);">Successfully Logged In. You can now access all 14 pages.</p>
+    <button class="btn" style="max-width:200px; margin-top:30px;" onclick="location.reload()">Logout</button>
   </div>
 </div>
 
 <script>
-// Ithu thaan fix: Page load aagum pothu login-ai show seiyum
+// ITHU THAAN MUKKIYAM: Browser load aanavudane Login-ai kaatta
 window.onload = function() {
-  showPage('login');
+    showPage('login');
 };
 
 function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => {
-    p.classList.remove('active');
-    p.style.display = 'none';
-  });
-  
-  const target = document.getElementById('page-' + name);
-  if (target) {
-    target.classList.add('active');
-    // Login page-ukku flex display thevai, dashboard-ku block
-    if (name === 'login') {
-      target.style.display = 'flex';
-      document.getElementById('main-nav').style.display = 'none';
-    } else {
-      target.style.display = 'block';
-      document.getElementById('main-nav').style.display = 'flex';
+    // Ella page-aiyum maraikkavum
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+    });
+    
+    // Target page-ai mattum kaattavum
+    const target = document.getElementById('page-' + name);
+    if (target) {
+        target.classList.add('active');
     }
-  }
+
+    // Navbar-ai dashboard-la mattum kaattavum
+    const nav = document.getElementById('main-nav');
+    if(name === 'login') {
+        nav.style.display = 'none';
+    } else {
+        nav.style.display = 'flex';
+    }
 }
 
 function doLogin() {
-  showPage('dashboard');
+    const email = document.getElementById('userEmail').value;
+    showToast("Welcome " + (email || "Traveler") + "! ✨");
+    showPage('dashboard');
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
 }
 </script>
 </body>
