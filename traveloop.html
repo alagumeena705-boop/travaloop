@@ -6,48 +6,34 @@
 <title>Traveloop – Personalized Travel Planning</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
+/* ... (pazhaya CSS ellaame irukkum) ... */
 :root {
-  --bg: #08080f;
-  --surface: #10101e;
-  --surface2: #18182e;
-  --purple: #7c3aed;
-  --purple-light: #a855f7;
-  --purple-glow: rgba(124,58,237,0.35);
-  --white-glow: rgba(255,255,255,0.08);
-  --text: #f4f0ff;
-  --muted: #8b80a8;
-  --border: rgba(124,58,237,0.2);
-  --accent: #e879f9;
-  --accent2: #38bdf8;
-  --success: #4ade80;
+  --bg: #08080f; --surface: #10101e; --surface2: #18182e;
+  --purple: #7c3aed; --purple-light: #a855f7; --purple-glow: rgba(124,58,237,0.35);
+  --white-glow: rgba(255,255,255,0.08); --text: #f4f0ff; --muted: #8b80a8;
+  --border: rgba(124,58,237,0.2); --accent: #e879f9; --accent2: #38bdf8; --success: #4ade80;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-/* PAGES */
-.page { display: none; min-height: 100vh; position: relative; z-index: 1; padding-top: 20px; }
+/* PAGES - Important Fix */
+.page { display: none; min-height: 100vh; position: relative; z-index: 1; }
 .page.active { display: block !important; }
 
-/* NAV */
-nav{
-  display:none; align-items:center; justify-content:space-between;
-  padding:18px 32px; border-bottom:1px solid var(--border);
-  position:sticky; top:0; z-index:100;
-  background:rgba(8,8,15,0.85); backdrop-filter:blur(16px);
-}
+/* ... (Matha styling - original code-il irunthu) ... */
+#page-login{display:none; align-items:center; justify-content:center; min-height:100vh;}
+#page-login.active{display:flex !important;}
+
+/* Original CSS-ai apadiyae thodaraum... */
+nav{ display:none; align-items:center; justify-content:space-between; padding:18px 32px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; background:rgba(8,8,15,0.85); backdrop-filter:blur(16px); }
 .logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;cursor:pointer;}
 .logo span{background:linear-gradient(135deg,var(--purple-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-
-/* UI Elements */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-top:20px;}
-.btn{padding:12px 24px;border-radius:50px;font-weight:600;cursor:pointer;border:none;transition: 0.3s;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
+.btn{padding:12px 24px;border-radius:50px;font-weight:600;cursor:pointer;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;}
-.input-group{margin-bottom:18px;}
+.input-group{margin-bottom:18px; text-align:left;}
 .input-group label{display:block;margin-bottom:6px;font-size:0.85rem;color:var(--muted);}
 .input-group input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;color:#fff;}
-
-/* Specific Login Center */
-#page-login { display: flex !important; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
@@ -62,34 +48,53 @@ nav{
     <div class="card">
       <h2 style="margin-bottom:20px;">Welcome Back</h2>
       <div class="input-group">
-        <label>Email</label>
+        <label>Email Address</label>
         <input type="email" placeholder="you@example.com">
       </div>
       <div class="input-group">
         <label>Password</label>
         <input type="password" placeholder="••••••••">
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Login</button>
+      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Login to Traveloop</button>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-dashboard">
   <div style="padding:40px; text-align:center;">
-    <h1>Welcome to your <em>Dashboard</em></h1>
-    <p style="color:var(--muted); margin-top:10px;">Plan your next adventure here!</p>
-    <button class="btn btn-primary" style="margin-top:20px;" onclick="location.reload()">Logout</button>
+    <h1>Welcome to your Dashboard</h1>
+    <p style="color:var(--muted); margin-top:10px;">You are now logged in!</p>
   </div>
 </div>
 
 <script>
-// Login function to switch pages
-function doLogin() {
-  document.getElementById('page-login').classList.remove('active');
-  document.getElementById('page-login').style.setProperty('display', 'none', 'important');
+// Ithu thaan fix: Page load aagum pothu login-ai show seiyum
+window.onload = function() {
+  showPage('login');
+};
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
   
-  document.getElementById('page-dashboard').classList.add('active');
-  document.getElementById('main-nav').style.display = 'flex';
+  const target = document.getElementById('page-' + name);
+  if (target) {
+    target.classList.add('active');
+    // Login page-ukku flex display thevai, dashboard-ku block
+    if (name === 'login') {
+      target.style.display = 'flex';
+      document.getElementById('main-nav').style.display = 'none';
+    } else {
+      target.style.display = 'block';
+      document.getElementById('main-nav').style.display = 'flex';
+    }
+  }
+}
+
+function doLogin() {
+  showPage('dashboard');
 }
 </script>
 </body>
