@@ -28,19 +28,13 @@ nav { display: none; background: rgba(8,8,15,0.98); backdrop-filter: blur(15px);
 
 /* UI ELEMENTS */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-top: 15px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
 .btn { background: var(--purple); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:600; cursor:pointer; width: 100%; transition: 0.2s; }
-input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--surface2); border: 1px solid var(--border); color: #fff; border-radius: 10px; }
+input, select { width: 100%; padding: 12px; margin: 8px 0; background: var(--surface2); border: 1px solid var(--border); color: #fff; border-radius: 10px; }
 
-/* TABLE */
-.table-container { overflow-x: auto; margin-top: 15px; }
-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
-
-/* SPECIAL ICONS & SHARING */
-.share-icon { font-size: 2rem; margin-right: 15px; cursor: pointer; transition: 0.3s; }
-.share-icon:hover { color: var(--purple-light); }
-.profile-pic-box { width: 120px; height: 120px; border-radius: 50%; background: var(--surface2); border: 2px dashed var(--purple); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
+/* DYNAMIC LABELS */
+.tag { font-size: 0.7rem; padding: 4px 8px; border-radius: 5px; background: var(--purple); margin-bottom: 8px; display: inline-block; }
+.price { color: var(--success); font-weight: 700; font-size: 1.1rem; }
 </style>
 </head>
 <body>
@@ -48,14 +42,11 @@ th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border)
 <nav id="main-nav">
   <div class="nav-menu">
     <button onclick="showPage('dashboard')" id="btn-dashboard" class="active">🏠 Home</button>
+    <button onclick="showPage('search')" id="btn-search">🔍 Find Trip</button>
     <button onclick="showPage('itinerary')" id="btn-itinerary">📅 26-Day Plan</button>
-    <button onclick="showPage('explore')" id="btn-explore">🔍 Explore</button>
-    <button onclick="showPage('flights')" id="btn-flights">✈️ Flights</button>
-    <button onclick="showPage('hotels')" id="btn-hotels">🏨 Hotels</button>
+    <button onclick="showPage('flights')" id="btn-flights">✈️ Flight Results</button>
+    <button onclick="showPage('hotels')" id="btn-hotels">🏨 Hotel Results</button>
     <button onclick="showPage('profile')" id="btn-profile">👤 Profile</button>
-    <button onclick="showPage('share')" id="btn-share">🔗 Share</button>
-    <button onclick="showPage('settings')" id="btn-settings">⚙️ Settings</button>
-    <button onclick="showPage('my-trips')" id="btn-my-trips">🗺️ History</button>
   </div>
 </nav>
 
@@ -69,150 +60,116 @@ th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border)
   </div>
 </div>
 
+<div class="page" id="page-search">
+  <h2>Plan Your Next Journey</h2>
+  <div class="card" style="max-width: 600px; margin: 20px auto;">
+    <label>From (Source)</label>
+    <input type="text" id="src-city" placeholder="e.g. Chennai">
+    <label>To (Destination)</label>
+    <input type="text" id="dest-city" placeholder="e.g. Paris">
+    <label>Number of Days</label>
+    <input type="number" id="trip-days" placeholder="e.g. 26">
+    <button class="btn" onclick="searchTrip()">Search Flights & Hotels</button>
+  </div>
+</div>
+
 <div class="page" id="page-dashboard">
-  <h2>Dashboard</h2>
+  <h2>Welcome back, <span id="dash-user">Admin</span></h2>
   <div class="grid">
-    <div class="card"><h3>Active Trip</h3><p style="color:var(--success)">Swiss Alps Special</p></div>
-    <div class="card"><h3>Upcoming Flight</h3><p>Air India AI-101 (Dec 20)</p></div>
-  </div>
-  <div class="card">
-    <h3>10+ Recent Activity</h3>
-    <div id="dash-history"></div>
-  </div>
-</div>
-
-<div class="page" id="page-itinerary">
-  <h2>26-Day Detailed Grand Tour</h2>
-  <div class="table-container card">
-    <table>
-      <thead><tr><th>Day</th><th>Place to Visit</th><th>Key Attraction</th></tr></thead>
-      <tbody id="itinerary-table">
-        </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="page" id="page-explore">
-  <h2>Global Destinations</h2>
-  <div class="grid" id="explore-grid"></div>
-</div>
-
-<div class="page" id="page-profile">
-  <div class="card" style="max-width:500px; margin: 0 auto; text-align:center;">
-    <div class="profile-pic-box" onclick="alert('Open Gallery to upload')">
-      <span>Add Pic</span>
-    </div>
-    <input type="text" id="prof-name" placeholder="Full Name">
-    <input type="email" id="prof-email" placeholder="Email Address">
-    <input type="text" id="prof-ph" placeholder="Phone Number">
-    <textarea id="prof-addr" placeholder="Home Address"></textarea>
-    <button class="btn" onclick="alert('Profile Updated!')">Update Profile</button>
+    <div class="card"><h3>Active Search</h3><p id="active-route" style="color:var(--success)">No active search</p></div>
+    <div class="card"><h3>Today's Status</h3><p>Ready to Fly ✈️</p></div>
   </div>
 </div>
 
 <div class="page" id="page-flights">
-  <h2>Flight Management</h2>
-  <div class="card">
-    <h4 style="color:var(--success)">✈️ Current Trip Flight</h4>
-    <p>Qatar Airways QR-507 (Chennai to Paris)</p>
+  <h2>Available Flights (Top 10+)</h2>
+  <div id="flight-list" class="grid">
+    <p style="color:var(--muted)">Search for a trip to see results.</p>
   </div>
-  <h3 style="margin-top:20px;">Past Flight History</h3>
-  <div id="flight-history" class="grid"></div>
 </div>
 
 <div class="page" id="page-hotels">
-  <h2>Hotel Reservations</h2>
-  <div class="card">
-    <h4 style="color:var(--success)">🏨 Current Stay</h4>
-    <p>The Grand Swiss Resort - Room 402</p>
-  </div>
-  <h3 style="margin-top:20px;">Past Hotel Bookings</h3>
-  <div id="hotel-history" class="grid"></div>
-</div>
-
-<div class="page" id="page-share">
-  <div class="card" style="text-align:center;">
-    <h2>Share your Journey</h2>
-    <p style="color:var(--muted); margin-bottom:20px;">Connect with your friends</p>
-    <div style="display:flex; justify-content:center;">
-      <span class="share-icon">📱 WhatsApp</span>
-      <span class="share-icon">📸 Instagram</span>
-      <span class="share-icon">💬 Messenger</span>
-    </div>
-    <button class="btn" style="margin-top:20px; width:200px;">+ Add More</button>
+  <h2>Recommended Luxury Hotels</h2>
+  <div id="hotel-list" class="grid">
+    <p style="color:var(--muted)">Search for a trip to see results.</p>
   </div>
 </div>
 
-<div class="page" id="page-settings">
-  <h2>Settings & Support</h2>
-  <div class="card">
-    <div style="padding:10px; border-bottom:1px solid var(--border); cursor:pointer;">❓ Help Center</div>
-    <div style="padding:10px; border-bottom:1px solid var(--border); cursor:pointer;">🔒 Privacy Policy</div>
-    <div style="padding:10px; border-bottom:1px solid var(--border); cursor:pointer;">🔔 Notifications</div>
-    <div style="padding:10px; color:var(--error); cursor:pointer;" onclick="location.reload()">🚪 Logout</div>
-  </div>
-</div>
-
-<div class="page" id="page-my-trips">
-  <h2>History of All Trips</h2>
-  <div id="history-list" class="grid"></div>
-</div>
+<div class="page" id="page-itinerary"><h2>Itinerary</h2><div id="itin-list" class="card"></div></div>
+<div class="page" id="page-profile"><h2>Profile</h2><div class="card">Name: <span id="prof-disp-name"></span></div></div>
 
 <script>
-// --- NAVIGATION CORE ---
+// NAVIGATION
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   document.getElementById('main-nav').style.display = (name === 'login') ? 'none' : 'block';
-  
   document.querySelectorAll('.nav-menu button').forEach(b => b.classList.remove('active'));
   if(document.getElementById('btn-' + name)) document.getElementById('btn-' + name).classList.add('active');
-  window.scrollTo(0,0);
 }
 
 function doLogin() {
   const user = document.getElementById('user-input').value || "Admin";
-  document.getElementById('prof-name').value = user;
-  showPage('dashboard');
-  loadFullData();
+  document.getElementById('dash-user').innerText = user;
+  document.getElementById('prof-disp-name').innerText = user;
+  showPage('search');
 }
 
-// --- DATA INJECTION ---
-function loadFullData() {
-  // 1. 26 Days Itinerary
-  const itin = document.getElementById('itinerary-table');
-  const places = ["Eiffel Tower", "Louvre Museum", "Swiss Alps", "Venice Canals", "Rome Colosseum", "Dubai Mall", "Burj Khalifa", "Santorini Sunset", "London Eye", "Big Ben", "Tokyo Shibuya", "Mount Fuji", "Bali Beaches", "Sydney Opera", "New York Times Square", "Statue of Liberty", "Grand Canyon", "Niagara Falls", "Taj Mahal", "Pyramids Giza", "Great Wall China", "Singapore Marina", "Petra Jordan", "Macchu Pichu", "Iceland Auroras", "Back to Home"];
-  itin.innerHTML = "";
-  for(let i=1; i<=26; i++) {
-    itin.innerHTML += `<tr><td>Day ${i}</td><td>${places[i-1] || "Global Place"}</td><td>Top Attraction Visit</td></tr>`;
-  }
+// SEARCH CORE LOGIC
+function searchTrip() {
+  const from = document.getElementById('src-city').value;
+  const to = document.getElementById('dest-city').value;
+  const days = document.getElementById('trip-days').value;
 
-  // 2. Explore Details
-  const explore = document.getElementById('explore-grid');
-  const expData = ["Switzerland", "Japan", "Norway", "Italy", "France", "USA"];
-  explore.innerHTML = "";
-  expData.forEach(e => {
-    explore.innerHTML += `<div class="card"><h4>${e}</h4><p style="font-size:0.8rem; color:var(--muted)">Explore the beautiful culture and scenic views of ${e}. View details for more.</p><button class="btn" onclick="alert('Details for ${e}: High Mountains, Great Food, and Culture.')">View Details</button></div>`;
+  if(!from || !to || !days) { alert("Please enter all details!"); return; }
+
+  document.getElementById('active-route').innerText = `${from} ➔ ${to} (${days} Days)`;
+  
+  generateFlights(from, to);
+  generateHotels(to, days);
+  
+  showPage('flights'); // Jump to flights after search
+}
+
+function generateFlights(src, dest) {
+  const airlines = ["Emirates", "Qatar Airways", "Etihad", "Air France", "IndiGo", "Lufthansa", "British Airways", "Air India", "Singapore Air", "Turkish Airlines", "Swiss Air"];
+  const list = document.getElementById('flight-list');
+  list.innerHTML = "";
+
+  airlines.forEach(air => {
+    const price = Math.floor(Math.random() * (90000 - 35000) + 35000);
+    list.innerHTML += `
+      <div class="card">
+        <span class="tag">DEPARTURE: ${src}</span>
+        <h4>${air}</h4>
+        <p style="font-size:0.85rem;">Non-stop / 1-Stop to ${dest}</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+          <span class="price">₹${price.toLocaleString()}</span>
+          <button class="btn" style="width:100px; padding:5px;" onclick="alert('Booking Redirect...')">Book</button>
+        </div>
+      </div>`;
   });
+}
 
-  // 3. Flight History
-  const fHist = document.getElementById('flight-history');
-  const fNames = ["Emirates EK-542", "IndiGo 6E-210", "Lufthansa LH-756", "British Airways BA-012"];
-  fHist.innerHTML = "";
-  fNames.forEach(f => fHist.innerHTML += `<div class="card">${f}<br><small>Completed - Jan 2024</small></div>`);
+function generateHotels(dest, days) {
+  const hotels = ["Grand Hyatt", "The Ritz-Carlton", "Four Seasons", "Marriott Luxe", "Hilton Riverside", "InterContinental", "The Dolder Grand", "Shangri-La", "Sheraton Grand", "Bürgenstock Alpine Spa", "Mandarin Oriental", "Le Grand Mazarin"];
+  const list = document.getElementById('hotel-list');
+  list.innerHTML = "";
 
-  // 4. Hotel History
-  const hHist = document.getElementById('hotel-history');
-  const hNames = ["Marriott International", "Hilton Paris", "ITC Grand Chola", "Swissotel Zurich"];
-  hHist.innerHTML = "";
-  hNames.forEach(h => hHist.innerHTML += `<div class="card">${h}<br><small>Checkout - Feb 2024</small></div>`);
-
-  // 5. Trip History
-  const tHist = document.getElementById('history-list');
-  tHist.innerHTML = "";
-  for(let i=1; i<=10; i++) {
-    tHist.innerHTML += `<div class="card"><h4>Trip #${i} - International</h4><p>Completed on 2023-0${i}-15</p></div>`;
-  }
+  hotels.forEach(h => {
+    const perNight = Math.floor(Math.random() * (45000 - 15000) + 15000);
+    const total = perNight * days;
+    list.innerHTML += `
+      <div class="card">
+        <span class="tag">LOCATION: ${dest}</span>
+        <h4>${h}</h4>
+        <p style="font-size:0.8rem; color:var(--muted)">5-Star Rating • Premium Wi-Fi • Breakfast Inc.</p>
+        <hr style="border:0.1px solid var(--border); margin:10px 0;">
+        <p style="font-size:0.8rem;">₹${perNight.toLocaleString()} / Night</p>
+        <p class="price">Total: ₹${total.toLocaleString()}</p>
+        <button class="btn" style="margin-top:10px;" onclick="alert('Reserved!')">Reserve Now</button>
+      </div>`;
+  });
 }
 </script>
 
