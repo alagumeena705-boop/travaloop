@@ -24,288 +24,73 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-/* GLOW BG */
-body::before{
-  content:'';position:fixed;top:-30%;left:20%;width:60vw;height:60vw;
-  background:radial-gradient(ellipse,rgba(124,58,237,0.18) 0%,transparent 70%);
-  pointer-events:none;z-index:0;
-}
-body::after{
-  content:'';position:fixed;bottom:-20%;right:10%;width:40vw;height:40vw;
-  background:radial-gradient(ellipse,rgba(232,121,249,0.1) 0%,transparent 70%);
-  pointer-events:none;z-index:0;
-}
-
 /* PAGES */
-.page{display:none;min-height:100vh;position:relative;z-index:1;animation:fadeIn 0.4s ease;}
-.page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.page { display: none; min-height: 100vh; position: relative; z-index: 1; padding-top: 20px; }
+.page.active { display: block !important; }
 
 /* NAV */
 nav{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 32px;border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:100;
-  background:rgba(8,8,15,0.85);backdrop-filter:blur(16px);
+  display:none; align-items:center; justify-content:space-between;
+  padding:18px 32px; border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:100;
+  background:rgba(8,8,15,0.85); backdrop-filter:blur(16px);
 }
-.logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;letter-spacing:-0.5px;cursor:pointer;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;cursor:pointer;}
 .logo span{background:linear-gradient(135deg,var(--purple-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-links{display:flex;gap:8px;list-style:none;}
-.nav-links button{background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;padding:8px 14px;border-radius:8px;transition:all 0.2s;}
-.nav-links button:hover,.nav-links button.active{color:var(--text);background:var(--white-glow);}
-.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#fff;cursor:pointer;border:2px solid var(--border);}
 
-/* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color 0.2s,box-shadow 0.2s;}
-.card:hover{border-color:var(--purple-light);box-shadow:0 0 24px var(--purple-glow);}
-
-/* BUTTONS */
-.btn{padding:12px 24px;border-radius:50px;font-family:'Outfit',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;border:none;}
-.btn-primary{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;box-shadow:0 0 20px var(--purple-glow);}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 32px var(--purple-glow);}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
-.btn-outline:hover{border-color:var(--purple-light);background:var(--white-glow);}
-.btn-sm{padding:8px 18px;font-size:0.82rem;}
-
-/* INPUTS */
+/* UI Elements */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-top:20px;}
+.btn{padding:12px 24px;border-radius:50px;font-weight:600;cursor:pointer;border:none;transition: 0.3s;}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;}
 .input-group{margin-bottom:18px;}
-.input-group label{display:block;margin-bottom:6px;font-size:0.85rem;color:var(--muted);font-weight:500;}
-.input-group input,.input-group textarea,.input-group select{
-  width:100%;background:var(--surface2);border:1px solid var(--border);
-  border-radius:10px;padding:12px 16px;color:var(--text);
-  font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;
-}
-.input-group input:focus,.input-group textarea:focus,.input-group select:focus{border-color:var(--purple-light);box-shadow:0 0 12px var(--purple-glow);}
-.input-group textarea{resize:vertical;min-height:80px;}
+.input-group label{display:block;margin-bottom:6px;font-size:0.85rem;color:var(--muted);}
+.input-group input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;color:#fff;}
 
-/* BADGE */
-.badge{display:inline-block;padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:600;}
-.badge-purple{background:rgba(124,58,237,0.2);color:var(--purple-light);border:1px solid var(--border);}
-.badge-green{background:rgba(74,222,128,0.15);color:var(--success);}
-.badge-blue{background:rgba(56,189,248,0.15);color:var(--accent2);}
-
-/* GLOW DIVIDER */
-.glow-line{height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);margin:32px 0;opacity:0.4;}
-
-/* TAB SWITCH */
-.tab-switch{display:flex;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:28px;}
-.tab-switch button{flex:1;padding:10px;border:none;background:none;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:600;font-size:0.88rem;border-radius:9px;cursor:pointer;transition:all 0.2s;}
-.tab-switch button.active{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;}
-
-/* DASHBOARD SPECIFIC */
-.page-content{max-width:1200px;margin:0 auto;padding:40px 32px;}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:20px;}
-.section-title span{color:var(--purple-light);}
-.hero-dash h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.15;}
-.hero-dash h1 em{font-style:italic;background:linear-gradient(135deg,var(--purple-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:40px;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;}
-.stat-card .num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;background:linear-gradient(135deg,var(--purple-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.stat-card .lbl{color:var(--muted);font-size:0.8rem;margin-top:4px;}
-
-.trips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:40px;}
-.trip-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:all 0.25s;}
-.trip-card:hover{border-color:var(--purple-light);transform:translateY(-4px);box-shadow:0 12px 40px var(--purple-glow);}
-.trip-card-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,var(--surface2),rgba(124,58,237,0.2));}
-.trip-card-body{padding:18px;}
-
-/* BUDGET & CHART */
-.budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.budget-total{background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(232,121,249,0.1));border:1px solid var(--border);border-radius:16px;padding:28px;text-align:center;}
-.budget-total .amount{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;background:linear-gradient(135deg,var(--purple-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.progress-bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:6px;}
-.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--accent));}
-.pie-chart{width:180px;height:180px;border-radius:50%;margin:20px auto;position:relative;background:conic-gradient(var(--purple) 0% 35%,var(--accent) 35% 60%,var(--accent2) 60% 80%,var(--success) 80% 100%);box-shadow:0 0 30px var(--purple-glow);}
-.pie-chart::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;background:var(--surface);border-radius:50%;}
-
-/* CHECKLIST */
-.checklist-categories{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-.checklist-cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;}
-.check-item{display:flex;align-items:center;gap:12px;padding:8px 0;}
-.check-item input:checked+label{color:var(--muted);text-decoration:line-through;}
-
-/* ADMIN TABLE */
-table{width:100%;border-collapse:collapse;}
-th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--border);font-size:0.85rem;}
-th{color:var(--muted);font-weight:500;text-transform:uppercase;}
-
-/* TOAST */
-.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--purple-light);border-radius:12px;padding:14px 20px;font-size:0.88rem;box-shadow:0 0 24px var(--purple-glow);z-index:9999;animation:slideUp 0.3s ease;display:none;}
-.toast.show{display:block;}
-@keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px;}
-
-@media(max-width:768px){
-  .nav-links{display:none;}
-  .budget-grid{grid-template-columns:1fr;}
-}
+/* Specific Login Center */
+#page-login { display: flex !important; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
 
-<div class="toast" id="toast">✅ Action completed!</div>
-
-<nav id="main-nav" style="display:none;">
-  <div class="logo" onclick="showPage('dashboard')">Travel<span>oop</span></div>
-  <ul class="nav-links">
-    <li><button onclick="showPage('dashboard')" id="nav-dashboard">🏠 Home</button></li>
-    <li><button onclick="showPage('my-trips')" id="nav-my-trips">🗺️ My Trips</button></li>
-    <li><button onclick="showPage('city-search')" id="nav-city-search">🔍 Explore</button></li>
-    <li><button onclick="showPage('budget')" id="nav-budget">💰 Budget</button></li>
-    <li><button onclick="showPage('checklist')" id="nav-checklist">✅ Checklist</button></li>
-    <li><button onclick="showPage('notes')" id="nav-notes">📝 Notes</button></li>
-    <li><button onclick="showPage('admin')" id="nav-admin">⚙️ Admin</button></li>
-  </ul>
-  <div class="avatar" id="user-avatar" onclick="showPage('profile')">G</div>
+<nav id="main-nav">
+  <div class="logo">Travel<span>oop</span></div>
 </nav>
 
 <div class="page active" id="page-login">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px;">
-    <div style="width:100%;max-width:420px;">
-      <div style="text-align:center;margin-bottom:40px;">
-        <div class="logo" style="font-size:2.8rem;display:inline-block;">Travel<span>oop</span></div>
-        <p style="color:var(--muted);margin-top:10px;">Your personalized travel planner ✈️</p>
+  <div style="width:100%; max-width:400px; text-align:center;">
+    <div class="logo" style="font-size:3rem; margin-bottom:20px;">Travel<span>oop</span></div>
+    <div class="card">
+      <h2 style="margin-bottom:20px;">Welcome Back</h2>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" placeholder="you@example.com">
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 0 40px var(--purple-glow);">
-        <div class="tab-switch" id="auth-tabs">
-          <button class="active" onclick="switchTab('login')">Login</button>
-          <button onclick="switchTab('signup')">Sign Up</button>
-        </div>
-        
-        <div id="login-form">
-          <form onsubmit="event.preventDefault(); doLogin();">
-            <div class="input-group">
-              <label>Email Address</label>
-              <input type="email" id="login-email" placeholder="you@example.com" required/>
-            </div>
-            <div class="input-group">
-              <label>Password</label>
-              <input type="password" placeholder="••••••••" required/>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;margin-top:10px;">Login to Traveloop</button>
-          </form>
-        </div>
-
-        <div id="signup-form" style="display:none;">
-          <form onsubmit="event.preventDefault(); doLogin();">
-            <div class="input-group">
-              <label>Full Name</label>
-              <input type="text" id="signup-name" placeholder="Govika Pathmanaban" required/>
-            </div>
-            <div class="input-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="you@example.com" required/>
-            </div>
-            <div class="input-group">
-              <label>Password</label>
-              <input type="password" placeholder="Create a strong password" required/>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;margin-top:10px;">Create Account</button>
-          </form>
-        </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" placeholder="••••••••">
       </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Login</button>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-dashboard">
-  <div class="page-content">
-    <div class="hero-dash">
-      <p style="color:var(--purple-light);letter-spacing:2px;text-transform:uppercase;font-size:0.8rem;margin-bottom:8px;">Good Morning 👋</p>
-      <h1>Where do you want to<br/><em>explore next?</em></h1>
-      <p>You have 3 upcoming trips and 2 draft itineraries waiting for you.</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap; margin-top:20px;">
-        <button class="btn btn-primary" onclick="showPage('create-trip')">✈️ Plan New Trip</button>
-        <button class="btn btn-outline" onclick="showPage('my-trips')">My Trips →</button>
-      </div>
-    </div>
-    <div class="stats-row" style="margin-top:40px;">
-      <div class="stat-card"><div class="num">3</div><div class="lbl">Upcoming Trips</div></div>
-      <div class="stat-card"><div class="num">12</div><div class="lbl">Cities Visited</div></div>
-      <div class="stat-card"><div class="num">₹48K</div><div class="lbl">Total Budget</div></div>
-      <div class="stat-card"><div class="num">24</div><div class="lbl">Activities Planned</div></div>
-    </div>
+  <div style="padding:40px; text-align:center;">
+    <h1>Welcome to your <em>Dashboard</em></h1>
+    <p style="color:var(--muted); margin-top:10px;">Plan your next adventure here!</p>
+    <button class="btn btn-primary" style="margin-top:20px;" onclick="location.reload()">Logout</button>
   </div>
 </div>
 
 <script>
-/**
- * Modified doLogin: Accepts any username/password.
- * Updates the UI with the name/email provided.
- */
+// Login function to switch pages
 function doLogin() {
-  const isSignUp = document.getElementById('signup-form').style.display === 'block';
-  let userName = "Traveler";
-
-  if (isSignUp) {
-    const nameInput = document.getElementById('signup-name').value;
-    if (nameInput) userName = nameInput;
-  } else {
-    const emailInput = document.getElementById('login-email').value;
-    if (emailInput) userName = emailInput.split('@')[0]; // Use prefix of email as name
-  }
-
-  // Update Avatar Initial
-  const avatar = document.getElementById('user-avatar');
-  if(avatar) avatar.textContent = userName.charAt(0).toUpperCase();
-
-  // Show welcome and transition
-  showToast(`Welcome back, ${userName}! ✨`);
-  showPage('dashboard');
-}
-
-function showPage(name) {
-  // Hide all
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-login').classList.remove('active');
+  document.getElementById('page-login').style.setProperty('display', 'none', 'important');
   
-  // Show target
-  const target = document.getElementById('page-' + name);
-  if (target) target.classList.add('active');
-
-  // Handle Navbar visibility
-  document.getElementById('main-nav').style.display = (name === 'login') ? 'none' : 'flex';
-
-  // Highlight active nav link
-  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
-  const activeBtn = document.getElementById('nav-' + name);
-  if (activeBtn) activeBtn.classList.add('active');
-  
-  window.scrollTo(0,0);
+  document.getElementById('page-dashboard').classList.add('active');
+  document.getElementById('main-nav').style.display = 'flex';
 }
-
-function switchTab(tab) {
-  const btns = document.querySelectorAll('#auth-tabs button');
-  btns.forEach(b => b.classList.remove('active'));
-  
-  const loginForm = document.getElementById('login-form');
-  const signupForm = document.getElementById('signup-form');
-
-  if (tab === 'login') {
-    btns[0].classList.add('active');
-    loginForm.style.display = 'block';
-    signupForm.style.display = 'none';
-  } else {
-    btns[1].classList.add('active');
-    loginForm.style.display = 'none';
-    signupForm.style.display = 'block';
-  }
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// Initial state check
-window.onload = () => {
-  showPage('login');
-};
 </script>
 </body>
 </html>
