@@ -3,177 +3,209 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Traveloop – Master Database Access</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet"/>
+<title>Traveloop Pro – Advanced Data Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg: #08080f; --surface: #10101e; --surface2: #18182e;
   --purple: #7c3aed; --purple-light: #a855f7; --text: #f4f0ff; 
-  --muted: #8b80a8; --border: rgba(124,58,237,0.2); --error: #ff4d4d;
+  --muted: #8b80a8; --border: rgba(124,58,237,0.2); --accent: #e879f9;
 }
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Outfit',sans-serif; }
 body { background:var(--bg); color:var(--text); overflow-x:hidden; }
 
-/* PAGES */
-.page { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
+/* PAGES SYSTEM */
+.page { display: none; padding: 20px; animation: fadeIn 0.3s ease; max-width: 1200px; margin: 0 auto; }
 .page.active { display: block; }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; } }
 
-/* NAV */
-nav { display: none; background: rgba(8,8,15,0.95); padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:100; justify-content:space-between; }
-.nav-menu { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
-.nav-menu button { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
-.nav-menu button.active { background: var(--purple); color: #fff; }
+/* NAVIGATION */
+nav { display: none; background: rgba(8,8,15,0.98); backdrop-filter: blur(15px); padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:1000; justify-content:space-between; align-items: center; }
+.nav-menu { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; width: 100%; }
+.nav-menu::-webkit-scrollbar { display: none; }
+.nav-menu button { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 10px 18px; border-radius: 25px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; }
+.nav-menu button.active { background: var(--purple); color: #fff; box-shadow: 0 0 15px var(--purple-glow); }
 
-/* CARDS & FORMS */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-top: 15px; }
-input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--surface2); border: 1px solid var(--border); color: #fff; border-radius: 10px; outline: none; }
-.btn { background: var(--purple); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:600; cursor:pointer; width: 100%; margin-top:10px; }
-.btn-delete { background: var(--error); margin-top: 5px; padding: 8px; font-size: 0.8rem; }
+/* UI CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-top: 15px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.btn { background: var(--purple); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:600; cursor:pointer; width: 100%; transition: 0.2s; }
+.btn-new { background: linear-gradient(135deg, var(--purple), var(--accent)); margin-bottom: 20px; }
+.btn-delete { background: #ff4d4d; width: auto; padding: 5px 12px; font-size: 0.8rem; }
 
-/* TRIP STATUS COLORS */
-.tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
-.past { background: #555; color: #ccc; }
-.present { background: #2ecc71; color: #fff; }
-.future { background: var(--purple); color: #fff; }
+/* TABLE & LISTS */
+.table-container { overflow-x: auto; margin-top: 15px; }
+table { width: 100%; border-collapse: collapse; min-width: 600px; }
+th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
+.past-tag { background: rgba(255,255,255,0.1); color: #bbb; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; }
 
-.trip-item { border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
+/* LOGIN BOX */
+#page-login { display: flex; align-items: center; justify-content: center; height: 100vh; }
+input, select { width: 100%; padding: 12px; margin: 10px 0; background: var(--surface2); border: 1px solid var(--border); color: #fff; border-radius: 10px; }
 </style>
 </head>
 <body>
 
 <nav id="main-nav">
-  <div style="font-weight:700; color:var(--purple-light)">Traveloop</div>
   <div class="nav-menu">
-    <button onclick="showPage('dashboard')" id="nav-dashboard">🏠 Home</button>
-    <button onclick="showPage('trips')" id="nav-trips">🗺️ My Database</button>
-    <button onclick="showPage('admin')" id="nav-admin">⚙️ Settings</button>
+    <button onclick="showPage('dashboard')" id="nav-dashboard" class="active">🏠 Dashboard</button>
+    <button onclick="showPage('itinerary')" id="nav-itinerary">📅 Itinerary (26+ Days)</button>
+    <button onclick="showPage('budget')" id="nav-budget">💰 Budget Details</button>
+    <button onclick="showPage('checklist')" id="nav-checklist">✅ Checklist</button>
+    <button onclick="showPage('explore')" id="nav-explore">🔍 Explore Places</button>
+    <button onclick="showPage('trips')" id="nav-trips">🗺️ All Trips</button>
+    <button onclick="showPage('notes')" id="nav-notes">📝 Travel Notes</button>
+    <button onclick="showPage('profile')" id="nav-profile">👤 Profile</button>
+    <button onclick="showPage('admin')" id="nav-admin">⚙️ Admin Access</button>
   </div>
 </nav>
 
 <div class="page active" id="page-login">
-  <div style="max-width:350px; margin: 100px auto; text-align:center;">
-    <h1 style="font-size:3rem; margin-bottom:20px;">Traveloop</h1>
+  <div style="width:100%; max-width:400px; text-align:center;">
+    <h1 style="font-family:'Cormorant Garamond'; font-size:3.5rem; margin-bottom:10px;">Travel<span>oop</span></h1>
     <div class="card">
-      <input type="text" id="login-user" placeholder="Enter Admin Name">
-      <button class="btn" onclick="doLogin()">Login to Database</button>
+      <input type="text" id="admin-user" placeholder="Admin Username">
+      <button class="btn" onclick="doLogin()">Login & Sync Database</button>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-dashboard">
-  <h2>Welcome, <span id="user-display"></span>!</h2>
-  <div class="card">
-    <h3>Quick Stats</h3>
-    <p>Total Trips in Database: <span id="total-count">0</span></p>
-    <button class="btn" onclick="showPage('trips')">Manage Database →</button>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2>Admin Dashboard</h2>
+    <button class="btn btn-new" style="width:auto; padding:10px 20px;" onclick="showPage('new-trip')">+ Create New Trip</button>
   </div>
-</div>
-
-<div class="page" id="page-trips">
-  <h2>Trip Master Database</h2>
   
-  <div class="card">
-    <h4 style="color:var(--purple-light)">+ Add New Trip Detail</h4>
-    <input type="text" id="dest" placeholder="Destination Name (e.g. Paris)">
-    <input type="date" id="t-date">
-    <select id="t-status">
-      <option value="past">Past Trip (Vandhu Mudichadhu)</option>
-      <option value="present">Present Trip (Ippo Poitu Irukkuradhu)</option>
-      <option value="future">Future Trip (Ini Mela Poga Poradhu)</option>
-    </select>
-    <button class="btn" onclick="addTrip()">Save to Database</button>
+  <div class="grid">
+    <div class="card"><h3>Total Trips</h3><p id="stat-total" style="font-size:2rem; color:var(--purple-light)">10</p></div>
+    <div class="card"><h3>Total Spent</h3><p style="font-size:2rem; color:#4ade80">₹6,45,000</p></div>
   </div>
 
-  <div id="trip-list-container"></div>
+  <h3 style="margin-top:30px;">10+ Past Trips Detail (Database)</h3>
+  <div class="table-container card">
+    <table>
+      <thead><tr><th>ID</th><th>Destination</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="past-trips-body">
+        </tbody>
+    </table>
+  </div>
 </div>
+
+<div class="page" id="page-itinerary">
+  <h2>Detailed Itinerary (26+ Days Planning)</h2>
+  <div class="table-container">
+    <table>
+      <thead><tr><th>Day</th><th>Activity</th><th>Location</th><th>Timing</th></tr></thead>
+      <tbody id="itinerary-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="page" id="page-budget">
+  <h2>Detailed Expense Analytics</h2>
+  <div class="grid" id="budget-list"></div>
+</div>
+
+<div class="page" id="page-new-trip">
+  <div class="card" style="max-width:500px; margin: 0 auto;">
+    <h2>Add New Data</h2>
+    <input type="text" id="new-dest" placeholder="Where to?">
+    <input type="date" id="new-date">
+    <select id="new-status">
+      <option value="Future">Future</option>
+      <option value="Past">Past</option>
+    </select>
+    <button class="btn" onclick="saveNewTrip()">Confirm & Add to DB</button>
+  </div>
+</div>
+
+<div class="page" id="page-checklist"><h2>Packing Master List</h2><div class="grid" id="check-list"></div></div>
+<div class="page" id="page-explore"><h2>Explore Destinations</h2><div class="grid" id="explore-list"></div></div>
+<div class="page" id="page-notes"><h2>Secret Travel Notes</h2><textarea style="width:100%; height:300px; background:var(--surface2); color:#fff; padding:20px; border-radius:15px;"></textarea></div>
 
 <script>
-// --- DATABASE INITIALIZATION ---
-let tripsDB = JSON.parse(localStorage.getItem('traveloop_db')) || [
-  { id: 1, dest: "Chennai", date: "2023-05-10", status: "past" },
-  { id: 2, dest: "Ooty", date: "2024-05-10", status: "present" },
-  { id: 3, dest: "Switzerland", date: "2025-12-20", status: "future" }
+// --- MASTER DATABASE ---
+let tripsData = JSON.parse(localStorage.getItem('traveloop_v2')) || [
+  {id:1, dest:"Paris, France", date:"2022-05-10", status:"Past"},
+  {id:2, dest:"Dubai, UAE", date:"2022-08-15", status:"Past"},
+  {id:3, dest:"London, UK", date:"2022-12-01", status:"Past"},
+  {id:4, dest:"Bali, Indonesia", date:"2023-03-20", status:"Past"},
+  {id:5, dest:"Goa, India", date:"2023-06-10", status:"Past"},
+  {id:6, dest:"Tokyo, Japan", date:"2023-09-25", status:"Past"},
+  {id:7, dest:"New York, USA", date:"2023-11-15", status:"Past"},
+  {id:8, dest:"Singapore", date:"2024-01-05", status:"Past"},
+  {id:9, dest:"Sydney, Australia", date:"2024-03-12", status:"Past"},
+  {id:10, dest:"Rome, Italy", date:"2024-05-20", status:"Past"}
 ];
 
-function saveDB() {
-  localStorage.setItem('traveloop_db', JSON.stringify(tripsDB));
-  renderTrips();
+// --- CORE FUNCTIONS ---
+function doLogin() {
+  showPage('dashboard');
+  loadAllData();
 }
 
-function renderTrips() {
-  const container = document.getElementById('trip-list-container');
-  const countDisplay = document.getElementById('total-count');
-  container.innerHTML = "";
-  countDisplay.innerText = tripsDB.length;
-
-  tripsDB.forEach((trip) => {
-    const div = document.createElement('div');
-    div.className = "card trip-item";
-    div.innerHTML = `
-      <div>
-        <span class="tag ${trip.status}">${trip.status}</span>
-        <h3 style="margin-top:5px">${trip.dest}</h3>
-        <small style="color:var(--muted)">Date: ${trip.date}</small>
-      </div>
-      <div style="text-align:right">
-        <button class="btn btn-delete" onclick="deleteTrip(${trip.id})">Delete</button>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-// --- CRUD OPERATIONS ---
-function addTrip() {
-  const dest = document.getElementById('dest').value;
-  const date = document.getElementById('t-date').value;
-  const status = document.getElementById('t-status').value;
-
-  if(!dest || !date) return alert("Please fill all details!");
-
-  const newTrip = {
-    id: Date.now(),
-    dest: dest,
-    date: date,
-    status: status
-  };
-
-  tripsDB.push(newTrip);
-  saveDB();
-  
-  // Clear inputs
-  document.getElementById('dest').value = "";
-}
-
-function deleteTrip(id) {
-  if(confirm("Are you sure you want to delete this trip from database?")) {
-    tripsDB = tripsDB.filter(t => t.id !== id);
-    saveDB();
-  }
-}
-
-// --- NAVIGATION ---
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   document.getElementById('main-nav').style.display = (name === 'login') ? 'none' : 'flex';
   
   document.querySelectorAll('.nav-menu button').forEach(b => b.classList.remove('active'));
-  const activeBtn = document.getElementById('nav-' + name);
-  if(activeBtn) activeBtn.classList.add('active');
+  const btn = document.getElementById('nav-' + name);
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function doLogin() {
-  const user = document.getElementById('login-user').value || "Admin";
-  document.getElementById('user-display').innerText = user;
+function loadAllData() {
+  // 1. Load Dashboard Past Trips (10 Data)
+  const body = document.getElementById('past-trips-body');
+  body.innerHTML = "";
+  tripsData.forEach(t => {
+    body.innerHTML += `<tr><td>#${t.id}</td><td>${t.dest}</td><td>${t.date}</td><td><span class="past-tag">${t.status}</span></td><td><button class="btn btn-delete" onclick="deleteTrip(${t.id})">Del</button></td></tr>`;
+  });
+  document.getElementById('stat-total').innerText = tripsData.length;
+
+  // 2. Load Itinerary (26+ Days)
+  const itBody = document.getElementById('itinerary-body');
+  itBody.innerHTML = "";
+  for(let i=1; i<=26; i++) {
+    itBody.innerHTML += `<tr><td>Day ${i}</td><td>Detailed Activity Plan ${i}</td><td>Global Location</td><td>09:00 AM</td></tr>`;
+  }
+
+  // 3. Load Budget
+  const budget = document.getElementById('budget-list');
+  const cats = ["Flights", "Hotel", "Food", "Visa", "Shopping", "Transport", "Insurance", "Emergency"];
+  budget.innerHTML = "";
+  cats.forEach(c => {
+    budget.innerHTML += `<div class="card"><h4>${c}</h4><p style="color:#4ade80">₹${Math.floor(Math.random()*50000)}</p></div>`;
+  });
+
+  // 4. Load Explore
+  const explore = document.getElementById('explore-list');
+  explore.innerHTML = "";
+  for(let i=1; i<=12; i++) {
+    explore.innerHTML += `<div class="card"><img src="https://picsum.photos/seed/${i}/300/200" style="width:100%; border-radius:10px;"><h3>Place Name ${i}</h3></div>`;
+  }
+}
+
+function saveNewTrip() {
+  const d = document.getElementById('new-dest').value;
+  const dt = document.getElementById('new-date').value;
+  const s = document.getElementById('new-status').value;
+  if(!d || !dt) return alert("Fill all data");
+  
+  tripsData.push({id: Date.now(), dest: d, date: dt, status: s});
+  localStorage.setItem('traveloop_v2', JSON.stringify(tripsData));
+  loadAllData();
   showPage('dashboard');
-  renderTrips();
 }
 
-window.onload = () => {
-  if(!localStorage.getItem('traveloop_db')) saveDB();
-};
+function deleteTrip(id) {
+  tripsData = tripsData.filter(t => t.id !== id);
+  localStorage.setItem('traveloop_v2', JSON.stringify(tripsData));
+  loadAllData();
+}
+
+window.onload = () => showPage('login');
 </script>
 </body>
 </html>
