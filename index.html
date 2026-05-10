@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Traveloop Pro – Advanced Data Center</title>
+<title>Traveloop Pro – Full Database</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -14,198 +14,182 @@
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Outfit',sans-serif; }
 body { background:var(--bg); color:var(--text); overflow-x:hidden; }
 
-/* PAGES SYSTEM */
-.page { display: none; padding: 20px; animation: fadeIn 0.3s ease; max-width: 1200px; margin: 0 auto; }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; } }
-
 /* NAVIGATION */
-nav { display: none; background: rgba(8,8,15,0.98); backdrop-filter: blur(15px); padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:1000; justify-content:space-between; align-items: center; }
-.nav-menu { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; width: 100%; }
+nav { display: none; background: rgba(8,8,15,0.95); backdrop-filter: blur(10px); padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:100; justify-content:space-between; align-items: center; }
+.nav-menu { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .nav-menu::-webkit-scrollbar { display: none; }
 .nav-menu button { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 10px 18px; border-radius: 25px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; }
-.nav-menu button.active { background: var(--purple); color: #fff; box-shadow: 0 0 15px var(--purple-glow); }
+.nav-menu button.active { background: var(--purple); color: #fff; }
+
+/* PAGES */
+.page { display: none; padding: 20px; animation: fadeIn 0.3s ease; max-width: 1200px; margin: 0 auto; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
 
 /* UI CARDS */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-top: 15px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-top: 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 .btn { background: var(--purple); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:600; cursor:pointer; width: 100%; transition: 0.2s; }
-.btn-new { background: linear-gradient(135deg, var(--purple), var(--accent)); margin-bottom: 20px; }
-.btn-delete { background: #ff4d4d; width: auto; padding: 5px 12px; font-size: 0.8rem; }
+.btn:hover { background: var(--purple-light); }
+input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--surface2); border: 1px solid var(--border); color: #fff; border-radius: 10px; }
 
-/* TABLE & LISTS */
+/* TABLE */
 .table-container { overflow-x: auto; margin-top: 15px; }
 table { width: 100%; border-collapse: collapse; min-width: 600px; }
 th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
-.past-tag { background: rgba(255,255,255,0.1); color: #bbb; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; }
-
-/* LOGIN BOX */
-#page-login { display: flex; align-items: center; justify-content: center; height: 100vh; }
-input, select { width: 100%; padding: 12px; margin: 10px 0; background: var(--surface2); border: 1px solid var(--border); color: #fff; border-radius: 10px; }
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; background: rgba(124, 58, 237, 0.2); color: var(--purple-light); }
 </style>
 </head>
 <body>
 
 <nav id="main-nav">
+  <div style="font-family:'Cormorant Garamond'; font-size:1.5rem; font-weight:700; margin-right:20px;">Traveloop</div>
   <div class="nav-menu">
-    <button onclick="showPage('dashboard')" id="nav-dashboard" class="active">🏠 Dashboard</button>
-    <button onclick="showPage('itinerary')" id="nav-itinerary">📅 Itinerary (26+ Days)</button>
-    <button onclick="showPage('budget')" id="nav-budget">💰 Budget Details</button>
-    <button onclick="showPage('checklist')" id="nav-checklist">✅ Checklist</button>
-    <button onclick="showPage('explore')" id="nav-explore">🔍 Explore Places</button>
-    <button onclick="showPage('trips')" id="nav-trips">🗺️ All Trips</button>
-    <button onclick="showPage('notes')" id="nav-notes">📝 Travel Notes</button>
-    <button onclick="showPage('profile')" id="nav-profile">👤 Profile</button>
-    <button onclick="showPage('admin')" id="nav-admin">⚙️ Admin Access</button>
+    <button onclick="showPage('dashboard')" class="nav-btn" id="btn-dashboard">🏠 Dashboard</button>
+    <button onclick="showPage('itinerary')" class="nav-btn" id="btn-itinerary">📅 Itinerary (26+)</button>
+    <button onclick="showPage('budget')" class="nav-btn" id="btn-budget">💰 Budget</button>
+    <button onclick="showPage('explore')" class="nav-btn" id="btn-explore">🔍 Explore</button>
+    <button onclick="showPage('checklist')" class="nav-btn" id="btn-checklist">✅ Checklist</button>
+    <button onclick="showPage('notes')" class="nav-btn" id="btn-notes">📝 Notes</button>
+    <button onclick="showPage('my-trips')" class="nav-btn" id="btn-my-trips">🗺️ My Trips</button>
+    <button onclick="showPage('profile')" class="nav-btn" id="btn-profile">👤 Profile</button>
+    <button onclick="showPage('admin')" class="nav-btn" id="btn-admin">⚙️ Admin</button>
+    <button onclick="showPage('settings')" class="nav-btn">🛠️ Settings</button>
+    <button onclick="showPage('flights')" class="nav-btn">✈️ Flights</button>
+    <button onclick="showPage('hotels')" class="nav-btn">🏨 Hotels</button>
+    <button onclick="showPage('activity')" class="nav-btn">🎭 Activity</button>
+    <button onclick="showPage('shared')" class="nav-btn">🔗 Shared</button>
   </div>
 </nav>
 
 <div class="page active" id="page-login">
-  <div style="width:100%; max-width:400px; text-align:center;">
-    <h1 style="font-family:'Cormorant Garamond'; font-size:3.5rem; margin-bottom:10px;">Travel<span>oop</span></h1>
+  <div style="max-width:400px; margin: 100px auto; text-align:center;">
+    <h1 style="font-family:'Cormorant Garamond'; font-size:3rem;">Travel<span>oop</span></h1>
     <div class="card">
-      <input type="text" id="admin-user" placeholder="Admin Username">
-      <button class="btn" onclick="doLogin()">Login & Sync Database</button>
+      <input type="text" id="username" placeholder="Enter Username">
+      <button class="btn" onclick="doLogin()">Login</button>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-dashboard">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-    <h2>Admin Dashboard</h2>
-    <button class="btn btn-new" style="width:auto; padding:10px 20px;" onclick="showPage('new-trip')">+ Create New Trip</button>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2>Welcome to Dashboard</h2>
+    <button class="btn" style="width:auto; padding:10px 20px;" onclick="showPage('create-trip')">+ Create New Trip</button>
   </div>
   
-  <div class="grid">
-    <div class="card"><h3>Total Trips</h3><p id="stat-total" style="font-size:2rem; color:var(--purple-light)">10</p></div>
-    <div class="card"><h3>Total Spent</h3><p style="font-size:2rem; color:#4ade80">₹6,45,000</p></div>
+  <div class="grid" style="margin-top:20px;">
+    <div class="card"><h3>Total Budget</h3><p style="color:var(--accent); font-size:1.5rem;">₹4,85,000</p></div>
+    <div class="card"><h3>Upcoming</h3><p>Switzerland - Dec 2025</p></div>
   </div>
 
-  <h3 style="margin-top:30px;">10+ Past Trips Detail (Database)</h3>
+  <h3 style="margin-top:30px;">10 Past Trips Store</h3>
   <div class="table-container card">
     <table>
-      <thead><tr><th>ID</th><th>Destination</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-      <tbody id="past-trips-body">
+      <thead><tr><th>Destination</th><th>Date</th><th>Budget</th><th>Status</th></tr></thead>
+      <tbody id="past-trips-list">
         </tbody>
     </table>
   </div>
 </div>
 
 <div class="page" id="page-itinerary">
-  <h2>Detailed Itinerary (26+ Days Planning)</h2>
-  <div class="table-container">
+  <h2>Detailed Itinerary (26+ Days)</h2>
+  <div class="table-container card">
     <table>
-      <thead><tr><th>Day</th><th>Activity</th><th>Location</th><th>Timing</th></tr></thead>
-      <tbody id="itinerary-body"></tbody>
+      <thead><tr><th>Day</th><th>Plan</th><th>Cost</th></tr></thead>
+      <tbody id="itinerary-list"></tbody>
     </table>
   </div>
 </div>
 
-<div class="page" id="page-budget">
-  <h2>Detailed Expense Analytics</h2>
-  <div class="grid" id="budget-list"></div>
-</div>
-
-<div class="page" id="page-new-trip">
+<div class="page" id="page-create-trip">
+  <h2>Plan a New Adventure</h2>
   <div class="card" style="max-width:500px; margin: 0 auto;">
-    <h2>Add New Data</h2>
-    <input type="text" id="new-dest" placeholder="Where to?">
-    <input type="date" id="new-date">
-    <select id="new-status">
-      <option value="Future">Future</option>
-      <option value="Past">Past</option>
-    </select>
-    <button class="btn" onclick="saveNewTrip()">Confirm & Add to DB</button>
+    <input type="text" placeholder="Destination Name">
+    <input type="date">
+    <input type="number" placeholder="Budget (₹)">
+    <button class="btn" onclick="alert('Trip Saved!'); showPage('dashboard')">Save Trip</button>
   </div>
 </div>
 
-<div class="page" id="page-checklist"><h2>Packing Master List</h2><div class="grid" id="check-list"></div></div>
-<div class="page" id="page-explore"><h2>Explore Destinations</h2><div class="grid" id="explore-list"></div></div>
-<div class="page" id="page-notes"><h2>Secret Travel Notes</h2><textarea style="width:100%; height:300px; background:var(--surface2); color:#fff; padding:20px; border-radius:15px;"></textarea></div>
+<div class="page" id="page-budget">
+  <h2>Detailed Budget Report</h2>
+  <div id="budget-items" class="grid"></div>
+</div>
+
+<div class="page" id="page-explore">
+  <h2>Explore Places</h2>
+  <div id="explore-grid" class="grid"></div>
+</div>
+
+<div class="page" id="page-checklist"><h2>Packing Checklist</h2><div id="check-list" class="grid"></div></div>
+<div class="page" id="page-notes"><h2>Travel Notes</h2><textarea style="height:200px;"></textarea></div>
+<div class="page" id="page-profile"><h2>My Profile</h2><div class="card">Name: Govika<br>Email: govika@example.com</div></div>
+<div class="page" id="page-admin"><h2>Admin Panel</h2><p>Managing 1,284 users...</p></div>
+<div class="page" id="page-my-trips"><h2>My Trip History</h2><div id="my-trips-list" class="grid"></div></div>
 
 <script>
-// --- MASTER DATABASE ---
-let tripsData = JSON.parse(localStorage.getItem('traveloop_v2')) || [
-  {id:1, dest:"Paris, France", date:"2022-05-10", status:"Past"},
-  {id:2, dest:"Dubai, UAE", date:"2022-08-15", status:"Past"},
-  {id:3, dest:"London, UK", date:"2022-12-01", status:"Past"},
-  {id:4, dest:"Bali, Indonesia", date:"2023-03-20", status:"Past"},
-  {id:5, dest:"Goa, India", date:"2023-06-10", status:"Past"},
-  {id:6, dest:"Tokyo, Japan", date:"2023-09-25", status:"Past"},
-  {id:7, dest:"New York, USA", date:"2023-11-15", status:"Past"},
-  {id:8, dest:"Singapore", date:"2024-01-05", status:"Past"},
-  {id:9, dest:"Sydney, Australia", date:"2024-03-12", status:"Past"},
-  {id:10, dest:"Rome, Italy", date:"2024-05-20", status:"Past"}
-];
-
-// --- CORE FUNCTIONS ---
-function doLogin() {
-  showPage('dashboard');
-  loadAllData();
-}
-
 function showPage(name) {
+  // Hide all pages
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Show selected page
   document.getElementById('page-' + name).classList.add('active');
+  // Show nav if not login
   document.getElementById('main-nav').style.display = (name === 'login') ? 'none' : 'flex';
   
-  document.querySelectorAll('.nav-menu button').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById('nav-' + name);
-  if (btn) btn.classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function loadAllData() {
-  // 1. Load Dashboard Past Trips (10 Data)
-  const body = document.getElementById('past-trips-body');
-  body.innerHTML = "";
-  tripsData.forEach(t => {
-    body.innerHTML += `<tr><td>#${t.id}</td><td>${t.dest}</td><td>${t.date}</td><td><span class="past-tag">${t.status}</span></td><td><button class="btn btn-delete" onclick="deleteTrip(${t.id})">Del</button></td></tr>`;
-  });
-  document.getElementById('stat-total').innerText = tripsData.length;
-
-  // 2. Load Itinerary (26+ Days)
-  const itBody = document.getElementById('itinerary-body');
-  itBody.innerHTML = "";
-  for(let i=1; i<=26; i++) {
-    itBody.innerHTML += `<tr><td>Day ${i}</td><td>Detailed Activity Plan ${i}</td><td>Global Location</td><td>09:00 AM</td></tr>`;
-  }
-
-  // 3. Load Budget
-  const budget = document.getElementById('budget-list');
-  const cats = ["Flights", "Hotel", "Food", "Visa", "Shopping", "Transport", "Insurance", "Emergency"];
-  budget.innerHTML = "";
-  cats.forEach(c => {
-    budget.innerHTML += `<div class="card"><h4>${c}</h4><p style="color:#4ade80">₹${Math.floor(Math.random()*50000)}</p></div>`;
-  });
-
-  // 4. Load Explore
-  const explore = document.getElementById('explore-list');
-  explore.innerHTML = "";
-  for(let i=1; i<=12; i++) {
-    explore.innerHTML += `<div class="card"><img src="https://picsum.photos/seed/${i}/300/200" style="width:100%; border-radius:10px;"><h3>Place Name ${i}</h3></div>`;
+  // Update Active Button
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if(document.getElementById('btn-' + name)) {
+    document.getElementById('btn-' + name).classList.add('active');
   }
 }
 
-function saveNewTrip() {
-  const d = document.getElementById('new-dest').value;
-  const dt = document.getElementById('new-date').value;
-  const s = document.getElementById('new-status').value;
-  if(!d || !dt) return alert("Fill all data");
-  
-  tripsData.push({id: Date.now(), dest: d, date: dt, status: s});
-  localStorage.setItem('traveloop_v2', JSON.stringify(tripsData));
-  loadAllData();
+function doLogin() {
   showPage('dashboard');
+  loadData();
 }
 
-function deleteTrip(id) {
-  tripsData = tripsData.filter(t => t.id !== id);
-  localStorage.setItem('traveloop_v2', JSON.stringify(tripsData));
-  loadAllData();
-}
+function loadData() {
+  // Load 10 Past Trips in Dashboard
+  const pastList = document.getElementById('past-trips-list');
+  pastList.innerHTML = "";
+  const pastDest = ["Paris", "London", "Tokyo", "Goa", "Dubai", "New York", "Bali", "Singapore", "Rome", "Sydney"];
+  for(let i=0; i<10; i++) {
+    pastList.innerHTML += `<tr><td>${pastDest[i]}</td><td>2023-0${i+1}-10</td><td>₹45,000</td><td><span class="badge">Completed</span></td></tr>`;
+  }
 
-window.onload = () => showPage('login');
+  // Load 26+ Itinerary Days
+  const itinList = document.getElementById('itinerary-list');
+  itinList.innerHTML = "";
+  for(let i=1; i<=26; i++) {
+    itinList.innerHTML += `<tr><td>Day ${i}</td><td>Full day exploration and activity plan for day ${i}</td><td>₹1,200</td></tr>`;
+  }
+
+  // Load Budget Details
+  const budgetBox = document.getElementById('budget-items');
+  const cats = ["Flights", "Hotels", "Food", "Shopping", "Transport", "Visa", "Insurance", "Misc"];
+  budgetBox.innerHTML = "";
+  cats.forEach(c => {
+    budgetBox.innerHTML += `<div class="card"><h4>${c}</h4><p>₹${Math.floor(Math.random()*20000)}</p></div>`;
+  });
+
+  // Load Explore with Images
+  const exploreGrid = document.getElementById('explore-grid');
+  exploreGrid.innerHTML = "";
+  for(let i=1; i<=6; i++) {
+    exploreGrid.innerHTML += `<div class="card"><img src="https://picsum.photos/seed/${i+10}/300/150" style="width:100%; border-radius:10px;"><br><h4>Destination ${i}</h4><button class="btn" style="margin-top:10px;">View Details</button></div>`;
+  }
+  
+  // Load Checklist
+  const checkGrid = document.getElementById('check-list');
+  const items = ["Passport", "Tickets", "Powerbank", "Clothes", "Medicines", "Camera", "Charger", "Wallet"];
+  checkGrid.innerHTML = "";
+  items.forEach(item => {
+    checkGrid.innerHTML += `<div class="card"><input type="checkbox"> ${item}</div>`;
+  });
+}
 </script>
+
 </body>
 </html>
